@@ -400,8 +400,6 @@ def main():
 
     user_question = st.text_input("Ask a Question from the PDF Files", key="user_question")
 
-
-    pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True, key="pdf_uploader")
     if st.button("Submit & Process", key="process_button"):  # Check if API key is provided before processing
         with st.spinner("Processing..."):
             text_summaries, table_summaries = generate_text_summaries(texts, tables, summarize_texts=True)
