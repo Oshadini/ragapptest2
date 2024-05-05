@@ -373,7 +373,7 @@ def multi_modal_rag_chain(retriever):
 
 session_state = st.session_state
 uploaded_file = st.file_uploader(label = "Upload your file",type="pdf")
-
+query = st.text_input("Ask a Question from the PDF Files", key="user_question") 
 pr = st.button("Process")
 if pr ==True:
     temp_file="./temp.pdf"
@@ -405,9 +405,7 @@ if pr ==True:
     st.write("retreiving docs")
     retriever_multi_vector_img = create_multi_vector_retriever(vectorstore,text_summaries,texts,table_summaries,tables,image_summaries,img_base64_list)
     st.write("chaim")
-query = st.text_input("Ask a Question from the PDF Files", key="user_question")  
-pr2 = st.button("Generate")
-if pr2 ==True:
+ 
     chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
     docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
     markdown_text = chain_multimodal_rag.invoke(query)
