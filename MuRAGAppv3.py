@@ -66,27 +66,7 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 st.set_page_config(layout='wide', initial_sidebar_state='expanded')
 
-uploaded_file = st.file_uploader(label = "Upload your file",type="pdf")
-user_question = st.text_input("Ask a Question from the PDF Files", key="user_question")
-pr = st.button("Process")
-if pr ==True:
-    temp_file="./temp.pdf"
-    with open(temp_file,"wb") as file:
-        file.write(uploaded_file.getvalue())
 
-    image_path = "./"
-    pdf_elements = partition_pdf(
-        temp_file,
-        chunking_strategy="by_title",
-        #chunking_strategy="basic",
-        extract_images_in_pdf=True,
-        infer_table_structure=True,
-        max_characters=3000,
-        new_after_n_chars=2800,
-        combine_text_under_n_chars=2000,
-        image_output_dir_path=image_path
-    )
-    st.write(pdf_elements)
 
 # Categorize elements by type
 def categorize_elements(raw_pdf_elements):
@@ -396,19 +376,39 @@ def multi_modal_rag_chain(retriever):
   return chain
 
 
+uploaded_file = st.file_uploader(label = "Upload your file",type="pdf")
+user_question = st.text_input("Ask a Question from the PDF Files", key="user_question")
+pr = st.button("Process")
+if pr ==True:
+    temp_file="./temp.pdf"
+    with open(temp_file,"wb") as file:
+        file.write(uploaded_file.getvalue())
+
+    image_path = "./"
+    pdf_elements = partition_pdf(
+        temp_file,
+        chunking_strategy="by_title",
+        #chunking_strategy="basic",
+        extract_images_in_pdf=True,
+        infer_table_structure=True,
+        max_characters=3000,
+        new_after_n_chars=2800,
+        combine_text_under_n_chars=2000,
+        image_output_dir_path=image_path
+    )
+    st.write(pdf_elements)
 
 
-
-texts, tables = categorize_elements(pdf_elements)
-text_summaries, table_summaries = generate_text_summaries(texts, tables, summarize_texts=True)
-fpath = "figures"
-img_base64_list, image_summaries = generate_img_summaries(fpath)
-vectorstore = Chroma(collection_name="mm_rag_mistral",embedding_function=OpenAIEmbeddings())
-retriever_multi_vector_img = create_multi_vector_retriever(vectorstore,text_summaries,texts,table_summaries,tables,image_summaries,img_base64_list)
-chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
-docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
-markdown_text = chain_multimodal_rag.invoke(query)
-st.success(markdown_text)
+    texts, tables = categorize_elements(pdf_elements)
+    text_summaries, table_summaries = generate_text_summaries(texts, tables, summarize_texts=True)
+    fpath = "figures"
+    img_base64_list, image_summaries = generate_img_summaries(fpath)
+    vectorstore = Chroma(collection_name="mm_rag_mistral",embedding_function=OpenAIEmbeddings())
+    retriever_multi_vector_img = create_multi_vector_retriever(vectorstore,text_summaries,texts,table_summaries,tables,image_summaries,img_base64_list)
+    chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
+    docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
+    markdown_text = chain_multimodal_rag.invoke(query)
+    st.success(markdown_text)
 
 
 
