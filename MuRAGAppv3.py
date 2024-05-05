@@ -47,15 +47,11 @@ from langchain.chat_models import ChatOpenAI
 import base64
 from PIL import Image
 from io import BytesIO
-
-from IPython.display import display, Markdown
-
 from IPython import display
 from IPython.display import HTML, display as ipy_display
 
 
 
-unique_id = uuid4().hex[0:8]
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_PROJECT"] = "multi_model_rag_mvr"
 os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
