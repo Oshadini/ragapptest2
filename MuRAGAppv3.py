@@ -409,17 +409,14 @@ def retrieve_and_process_pdf(uploaded_file):
 pr = st.button("Process")
 if pr:
     retriever_multi_vector_img = retrieve_and_process_pdf(uploaded_file)
-      # Store the value in session state
-    session_state.retriever_multi_vector_img = retriever_multi_vector_img
-    st.write(retriever_multi_vector_img)
-
+    retriever_multi_vector_img_st = st.session_state.retriever_multi_vector_img
 # Perform generation if button is clicked
 query = st.text_input("Ask a Question from the PDF Files", key="user_question")  
 pr2 = st.button("Generate")
 if pr2:
-    retriever_multi_vector_img = session_state.retriever_multi_vector_img
+    retriever_multi_vector_imgstt = retriever_multi_vector_img_st 
     if retriever_multi_vector_img is not None:
-      chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
+      chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_imgstt)
       docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
       markdown_text = chain_multimodal_rag.invoke(query)
       st.success(markdown_text)
