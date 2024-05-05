@@ -417,7 +417,7 @@ if pr2:
     retriever_multi_vector_imgstt = st.session_state.retriever_multi_vector_img
     if retriever_multi_vector_imgstt is not None:
       chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_imgstt)
-      docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
+      docs = retriever_multi_vector_imgstt.get_relevant_documents(query, limit=1)
       markdown_text = chain_multimodal_rag.invoke(query)
       st.success(markdown_text)
     else:
