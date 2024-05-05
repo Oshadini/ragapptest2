@@ -375,7 +375,7 @@ def multi_modal_rag_chain(retriever):
 
   return chain
 
-
+retriever_multi_vector_img = None
 uploaded_file = st.file_uploader(label = "Upload your file",type="pdf")
 
 # Define the retrieval and processing steps
@@ -407,7 +407,8 @@ def retrieve_and_process_pdf(uploaded_file):
 
     return retriever_multi_vector_img
 
-    
+
+
 # Retrieve and process PDF if button is clicked
 pr = st.button("Process")
 if pr:
@@ -417,15 +418,14 @@ if pr:
 query = st.text_input("Ask a Question from the PDF Files", key="user_question")  
 pr2 = st.button("Generate")
 if pr2:
-    if 'retriever_multi_vector_img' in locals():
-        chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
-        docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
-        markdown_text = chain_multimodal_rag.invoke(query)
-        st.success(markdown_text)
+    if retriever_multi_vector_img is not None:
+      chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
+      docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
+      markdown_text = chain_multimodal_rag.invoke(query)
+      st.success(markdown_text)
     else:
-        st.error("Please process the PDF first.")
-
-
+        # Handle the case where retriever_multi_vector_img is None
+      st.error("Please process the PDF first before generating.")
 
 
 
