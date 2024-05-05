@@ -187,11 +187,11 @@ def image_summarize(img_base64, prompt):
   return msg.content
 
 def create_directory_if_not_exists(directory):
-if not os.path.exists(directory):
-    os.makedirs(directory)
-    print(f"Directory '{directory}' created.")
-else:
-    print(f"Directory '{directory}' already exists.")
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        print(f"Directory '{directory}' created.")
+    else:
+        print(f"Directory '{directory}' already exists.")
 
 def generate_img_summaries(path):
   """
