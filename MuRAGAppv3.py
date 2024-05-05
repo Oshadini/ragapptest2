@@ -401,14 +401,14 @@ if pr ==True:
 
     texts, tables = categorize_elements(pdf_elements)
     text_summaries, table_summaries = generate_text_summaries(texts, tables, summarize_texts=True)
-    st.write(generating image summaries)
+    st.write("generating image summaries")
     fpath = "figures"
     img_base64_list, image_summaries = generate_img_summaries(fpath)
-    st.write(creatig vector store)
+    st.write("creatig vector store")
     vectorstore = Chroma(collection_name="mm_rag_mistral",embedding_function=OpenAIEmbeddings())
-    st.write(retreiving docs)
+    st.write("retreiving docs")
     retriever_multi_vector_img = create_multi_vector_retriever(vectorstore,text_summaries,texts,table_summaries,tables,image_summaries,img_base64_list)
-    st.write(chaim)
+    st.write("chaim")
     chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
     docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
     markdown_text = chain_multimodal_rag.invoke(query)
