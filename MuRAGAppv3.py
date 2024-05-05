@@ -86,7 +86,7 @@ if pr ==True:
         combine_text_under_n_chars=2000,
         image_output_dir_path=image_path
     )
-st.write(pdf_elements)
+    st.write(pdf_elements)
 
 # Categorize elements by type
 def categorize_elements(raw_pdf_elements):
