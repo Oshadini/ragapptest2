@@ -86,6 +86,7 @@ if pr ==True:
         image_output_dir_path=image_path
     )
 st.write(pdf_elements)
+user_question = st.text_input("Ask a Question from the PDF Files", key="user_question")
 # Categorize elements by type
 def categorize_elements(raw_pdf_elements):
   """
@@ -395,19 +396,18 @@ def multi_modal_rag_chain(retriever):
 
 
 
-user_question = st.text_input("Ask a Question from the PDF Files", key="user_question")
-pr2 = st.button("Generate")
-if pr2 ==True:
-    texts, tables = categorize_elements(pdf_elements)
-    text_summaries, table_summaries = generate_text_summaries(texts, tables, summarize_texts=True)
-    fpath = "figures"
-    img_base64_list, image_summaries = generate_img_summaries(fpath)
-    vectorstore = Chroma(collection_name="mm_rag_mistral",embedding_function=OpenAIEmbeddings())
-    retriever_multi_vector_img = create_multi_vector_retriever(vectorstore,text_summaries,texts,table_summaries,tables,image_summaries,img_base64_list)
-    chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
-    docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
-    markdown_text = chain_multimodal_rag.invoke(query)
-    st.success(markdown_text)
+
+
+texts, tables = categorize_elements(pdf_elements)
+text_summaries, table_summaries = generate_text_summaries(texts, tables, summarize_texts=True)
+fpath = "figures"
+img_base64_list, image_summaries = generate_img_summaries(fpath)
+vectorstore = Chroma(collection_name="mm_rag_mistral",embedding_function=OpenAIEmbeddings())
+retriever_multi_vector_img = create_multi_vector_retriever(vectorstore,text_summaries,texts,table_summaries,tables,image_summaries,img_base64_list)
+chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
+docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
+markdown_text = chain_multimodal_rag.invoke(query)
+st.success(markdown_text)
 
 
 
