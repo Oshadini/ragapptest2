@@ -67,13 +67,12 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 st.set_page_config(layout='wide', initial_sidebar_state='expanded')
 
 uploaded_file = st.file_uploader(label = "Upload your file",type="pdf")
-if uploaded_file is not None:
     pr = st.button("Process")
     if pr ==True:
         temp_file="./temp.pdf"
         with open(temp_file,"wb") as file:
             file.write(uploaded_file.getvalue())
-
+    
         image_path = "./"
         pdf_elements = partition_pdf(
             temp_file,
