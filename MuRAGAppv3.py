@@ -52,8 +52,7 @@ from IPython.display import display, Markdown
 
 from IPython import display
 from IPython.display import HTML, display as ipy_display
-import streamlit as st
-from sessionstate import SessionStateLite
+
 
 
 unique_id = uuid4().hex[0:8]
@@ -376,7 +375,7 @@ def multi_modal_rag_chain(retriever):
 
   return chain
 
-session_state = SessionStateLite(retriever_multi_vector_img=None)
+session_state = st.session_state
 uploaded_file = st.file_uploader(label = "Upload your file",type="pdf")
 
 # Define the retrieval and processing steps
