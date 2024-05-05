@@ -102,7 +102,7 @@ if uploaded_file is not None:
                   texts.append(str(element))
           return texts, tables
         
-        texts, tables = categorize_elements(pdf_elements)
+        
 
 
 # Generate summaries of text elements
@@ -402,6 +402,7 @@ user_question = st.text_input("Ask a Question from the PDF Files", key="user_que
 
 if st.button("Submit & Process", key="process_button"):  # Check if API key is provided before processing
     with st.spinner("Processing..."):
+        texts, tables = categorize_elements(pdf_elements)
         text_summaries, table_summaries = generate_text_summaries(texts, tables, summarize_texts=True)
         fpath = "figures"
         img_base64_list, image_summaries = generate_img_summaries(fpath)
