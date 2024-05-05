@@ -52,7 +52,8 @@ from IPython.display import display, Markdown
 
 from IPython import display
 from IPython.display import HTML, display as ipy_display
-
+import streamlit as st
+from sessionstate import SessionStateLite
 
 
 unique_id = uuid4().hex[0:8]
@@ -375,7 +376,7 @@ def multi_modal_rag_chain(retriever):
 
   return chain
 
-retriever_multi_vector_img = None
+session_state = SessionStateLite(retriever_multi_vector_img=None)
 uploaded_file = st.file_uploader(label = "Upload your file",type="pdf")
 
 # Define the retrieval and processing steps
@@ -413,12 +414,15 @@ def retrieve_and_process_pdf(uploaded_file):
 pr = st.button("Process")
 if pr:
     retriever_multi_vector_img = retrieve_and_process_pdf(uploaded_file)
+      # Store the value in session state
+    session_state.retriever_multi_vector_img = retriever_multi_vector_img
     st.write(retriever_multi_vector_img)
 
 # Perform generation if button is clicked
 query = st.text_input("Ask a Question from the PDF Files", key="user_question")  
 pr2 = st.button("Generate")
 if pr2:
+    retriever_multi_vector_img = session_state.retriever_multi_vector_img
     if retriever_multi_vector_img is not None:
       chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
       docs = retriever_multi_vector_img.get_relevant_documents(query, limit=1)
