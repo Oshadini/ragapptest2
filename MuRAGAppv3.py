@@ -70,40 +70,40 @@ st.set_page_config(layout='wide', initial_sidebar_state='expanded')
 uploaded_file = st.file_uploader(label = "Upload your file",type="pdf")
 if uploaded_file is not None:
     pr = st.button("Process")
-        if pr ==True:
-            temp_file="./temp.pdf"
-            with open(temp_file,"wb") as file:
-                file.write(uploaded_file.getvalue())
+    if pr ==True:
+        temp_file="./temp.pdf"
+        with open(temp_file,"wb") as file:
+            file.write(uploaded_file.getvalue())
 
-            image_path = "./"
-            pdf_elements = partition_pdf(
-                temp_file,
-                chunking_strategy="by_title",
-                #chunking_strategy="basic",
-                extract_images_in_pdf=True,
-                infer_table_structure=True,
-                max_characters=3000,
-                new_after_n_chars=2800,
-                combine_text_under_n_chars=2000,
-                image_output_dir_path=image_path
-            )
+        image_path = "./"
+        pdf_elements = partition_pdf(
+            temp_file,
+            chunking_strategy="by_title",
+            #chunking_strategy="basic",
+            extract_images_in_pdf=True,
+            infer_table_structure=True,
+            max_characters=3000,
+            new_after_n_chars=2800,
+            combine_text_under_n_chars=2000,
+            image_output_dir_path=image_path
+        )
 
-            # Categorize elements by type
-            def categorize_elements(_raw_pdf_elements):
-              """
-              Categorize extracted elements from a PDF into tables and texts.
-              raw_pdf_elements: List of unstructured.documents.elements
-              """
-              tables = []
-              texts = []
-              for element in _raw_pdf_elements:
-                  if "unstructured.documents.elements.Table" in str(type(element)):
-                      tables.append(str(element))
-                  elif "unstructured.documents.elements.CompositeElement" in str(type(element)):
-                      texts.append(str(element))
-              return texts, tables
-            
-            texts, tables = categorize_elements(pdf_elements)
+        # Categorize elements by type
+        def categorize_elements(_raw_pdf_elements):
+          """
+          Categorize extracted elements from a PDF into tables and texts.
+          raw_pdf_elements: List of unstructured.documents.elements
+          """
+          tables = []
+          texts = []
+          for element in _raw_pdf_elements:
+              if "unstructured.documents.elements.Table" in str(type(element)):
+                  tables.append(str(element))
+              elif "unstructured.documents.elements.CompositeElement" in str(type(element)):
+                  texts.append(str(element))
+          return texts, tables
+        
+        texts, tables = categorize_elements(pdf_elements)
 
 
 # Generate summaries of text elements
