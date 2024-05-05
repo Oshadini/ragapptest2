@@ -413,6 +413,7 @@ def retrieve_and_process_pdf(uploaded_file):
 pr = st.button("Process")
 if pr:
     retriever_multi_vector_img = retrieve_and_process_pdf(uploaded_file)
+    st.write(retriever_multi_vector_img)
 
 # Perform generation if button is clicked
 query = st.text_input("Ask a Question from the PDF Files", key="user_question")  
